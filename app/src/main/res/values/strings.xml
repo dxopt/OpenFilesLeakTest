@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">OpenFilesLeakTest</string>
+
+    <string name="action_force_gc">Force GC</string>
+
+    <string name="btn_test">Run test</string>
+</resources>
