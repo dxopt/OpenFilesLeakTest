@@ -12,15 +12,38 @@ import java.io.IOException;
 import me.ycdev.android.demo.openfilesleak.utils.AppLogger;
 import me.ycdev.android.demo.openfilesleak.utils.OpenFilesUtils;
 import me.ycdev.android.demo.openfilesleak.utils.TestUtils;
+import me.ycdev.android.lib.common.utils.IoUtils;
+import me.ycdev.android.lib.common.utils.StorageUtils;
 
 public class ApkParserTest extends AndroidTestCase {
     private static final String TAG = "ApkParserTest";
 
     public void testValidApkFile() {
         String validApkFile = TestUtils.pickOneSystemAppPackageName(getContext());
-        AppLogger.d(TAG, "test zip file: " + validApkFile);
         assertTrue("failed to pick one system package", validApkFile != null);
 
+        doTestValidApkFile(validApkFile);
+    }
+
+    public void testValidApkFile2() {
+        String srcApkFile = TestUtils.pickOneSystemAppPackageName(getContext());
+        assertTrue("failed to pick one system package", srcApkFile != null);
+
+        assertTrue("no external storage", StorageUtils.isExternalStorageAvailable());
+        String sdcardRoot = StorageUtils.getExternalStoragePath();
+        String destApkFile = new File(sdcardRoot, "valid_apk_test2.apk").getAbsolutePath();
+        try {
+            IoUtils.copyFile(srcApkFile, destApkFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("cannot create apk file on external storage");
+        }
+
+        doTestValidApkFile(destApkFile);
+    }
+
+    private void doTestValidApkFile(String validApkFile) {
+        AppLogger.d(TAG, "test apk file: " + validApkFile);
         PackageInfo pkgInfo = getContext().getPackageManager().getPackageArchiveInfo(validApkFile, 0);
         assertTrue("failed to parse the apk file", pkgInfo != null);
 
@@ -31,17 +54,38 @@ public class ApkParserTest extends AndroidTestCase {
     }
 
     public void testInvalidApkFile() {
-        String invalidApkFile = getContext().getFileStreamPath("apk_test").getAbsolutePath();
+        String invalidApkFile = getContext().getFileStreamPath("invalid_apk_test.apk").getAbsolutePath();
         // create a invalid apk file
         try {
             FileOutputStream fos = new FileOutputStream(invalidApkFile);
-            fos.write("hello".getBytes());
+            fos.write("hello world, we need a long sentence".getBytes());
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
             fail("failed to create invalid apk file");
         }
 
+        doTestInvalidApkFile(invalidApkFile);
+    }
+
+    public void testInvalidApkFile2() {
+        assertTrue("no external storage", StorageUtils.isExternalStorageAvailable());
+        String sdcardRoot = StorageUtils.getExternalStoragePath();
+        String invalidApkFile = new File(sdcardRoot, "invalid_apk_test2.apk").getAbsolutePath();
+        // create a invalid apk file
+        try {
+            FileOutputStream fos = new FileOutputStream(invalidApkFile);
+            fos.write("hello world, we need a long sentence".getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("failed to create invalid apk file");
+        }
+
+        doTestInvalidApkFile(invalidApkFile);
+    }
+
+    private void doTestInvalidApkFile(String invalidApkFile) {
         File[] ofList = OpenFilesUtils.getOpenedFiles();
         assertTrue("failed to get open files", ofList != null);
         assertFalse("failed to close the file",

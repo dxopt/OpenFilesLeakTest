@@ -94,7 +94,7 @@ In constructor of java.util.ZipFile, if the zip file is invalid, the opened file
 The good news is that when GC happens, the RandomAccessFile object will close the leaked file. So, this issue is not a big problem in most cases. But if no GC happens, it's possible to reach the ulimit!
 
 The bad news is that when GC happens, the leaked file will not be closed on some devices! In this case, the ulimit will be reached eventually.
-> Please refer the test reports section.
+> Please refer the test reports section. In my test report, the opened files will be leaked in those devices with Android 4.0 ~ 4.1. Bug I didn't find out the leak reason in Android source code.
 
 Ref: https://code.google.com/p/android/issues/detail?id=66383
 
@@ -127,10 +127,32 @@ Currently, all the test cases pass most devices. But me.ycdev.android.demo.openf
 
 | Device Brand | Device Model | Android Version | Test Result | Remark |
 | :----------- | :----------- | :-------------- | :---------- | :----- |
-| MOTO         | MT887        | 4.1.2           | Fail        | ZipFile will leak invalid zip file. |
 
 ### Good news
 
 | Device Brand | Device Model | Android Version | Test Result | Remark |
 | :----------- | :----------- | :-------------- | :---------- | :----- |
 | Google       | Nexus 5      | 5.0.1           | Pass        |
+| Google       | Nexus 6      | 5.1             | Pass        |
+| Google       | Nexus One    | 2.3.3           | Pass        | No SD card |
+| Google       | Galaxy Nexus | 4.3             | Pass        |
+| Google       | Galaxy Nexus | 4.1.2           | Pass        |
+| Google       | Nexus 4      | 5.0             | Pass        |
+| Huawei       | H60-L02      | 4.4.2           | Pass        |
+| Huawei       | HUAWEI MT7-TL00 | 4.4.2        | Pass        |
+| Huawei       | H60-L11      | 4.4.2           | Pass        |
+| Huawei       | H30-U10      | 4.2.2           | Pass        |
+| Samsung      | SM-N9100     | 4.4.4           | Pass        |
+| Samsung      | GT-I9300     | 4.3             | Pass        |
+| Samsung      | GT-I8552     | 4.1.2           | Pass        |
+| Samsung      | SM-N9002     | 4.3             | Pass        |
+| Samsung      | SM-G9006W    | 5.0             | Pass        |
+| Xiaomi       | MI 4W        | 4.4.4           | Pass        |
+| Xiaomi       | MI 2SC       | 4.1.1           | Pass        |
+| Xiaomi       | MI 3         | 4.4.2           | Pass        |
+| MOTO         | MT887        | 4.1.2           | Pass        |
+| MOTO         | XT910        | 4.0.4           | Pass        |
+| OPPO         | N5207        | 4.4.4           | Pass        |
+| Lenovo       | Lenovo K900  | 4.2.2           | Pass        |
+| HTC          | HTC 919d     | 4.4.2           | Pass        |
+| Nubia        | NX505J       | 4.4.2           | Pass        |
