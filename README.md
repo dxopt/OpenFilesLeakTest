@@ -94,7 +94,7 @@ In constructor of java.util.ZipFile, if the zip file is invalid, the opened file
 The good news is that when GC happens, the RandomAccessFile object will close the leaked file. So, this issue is not a big problem in most cases. But if no GC happens, it's possible to reach the ulimit!
 
 The bad news is that when GC happens, the leaked file will not be closed on some devices! In this case, the ulimit will be reached eventually.
-> Please refer the test reports section. In my test report, the opened files will be leaked in those devices with Android 4.0 ~ 4.1. Bug I didn't find out the leak reason in Android source code.
+> Please refer the test reports section. In my test report, the opened files will be leaked in those devices with Android 4.0.x ~ 4.1.x. Bug I didn't find out the leak reason in Android source code.
 
 Ref: https://code.google.com/p/android/issues/detail?id=66383
 
@@ -118,8 +118,6 @@ Use the following command to run the test cases (connect the device first):
 [PWD: ~/work/tyc/ycdev/demos/OpenFilesLeakTest]  (master)
 $ ./gradlew connectedAndroidTest
 ```
-
-Currently, all the test cases pass most devices. But me.ycdev.android.demo.openfilesleak.ZipFileTest#testInvalidZipFile() may fail on some devices.
 
 ## Test report
 
