@@ -4,4 +4,8 @@
     <string name="action_force_gc">Force GC</string>
 
     <string name="btn_test">Run test</string>
+    <string name="btn_web_browser">Test WebView</string>
+    <string name="btn_webview_load">Load</string>
+    <string name="btn_webview_clear">Clear</string>
+    <string name="btn_webview_destroy">Destroy</string>
 </resources>

@@ -108,6 +108,17 @@ Ref: https://code.google.com/p/android/issues/detail?id=171099
 
 > This leak is still there, waiting for fix.
 
+### WebView leak
+
+When WebView is not needed any more, we can do the following things to do some clean:
+a) Invoke WebView.loadUrl("about:blank") to clear the WebView.
+b) Invoke WebView.destroy() to destroy the WebView.
+c) Let's GC to collect the WebView object.
+
+Unfortunately, even though we did all the above things, before Android 5.0, the open files leak is very serious.
+
+> So, take care when you decide to use WebView.
+
 ## How this project works
 
 This project use Android test cases to confirm the *open files leak* bugs in Android versions.

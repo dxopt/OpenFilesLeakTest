@@ -1,8 +1,9 @@
 package me.ycdev.android.demo.openfilesleak;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,7 @@ import java.util.zip.ZipFile;
 import me.ycdev.android.demo.openfilesleak.utils.AppLogger;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     @Override
@@ -28,6 +29,13 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 runZipFileTester();
+            }
+        });
+
+        findViewById(R.id.btn_web_browser).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWebBrowser();
             }
         });
     }
@@ -58,6 +66,11 @@ public class MainActivity extends ActionBarActivity {
         System.runFinalization();
         System.gc();
         SystemClock.sleep(1000);
+    }
+
+    private void openWebBrowser() {
+        Intent intent = new Intent(this, WebBrowserActivity.class);
+        startActivity(intent);
     }
 
     @Override
